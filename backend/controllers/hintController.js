@@ -3,7 +3,7 @@ const hints = require("../data/hints");
 const generateHint = (req, res) => {
 
   // Extract values from request body
-  const { problem, hintLevel } = req.body;
+  const { problem, code, language, hintLevel } = req.body;
 
   // Find the requested problem
   const selectedProblem = hints[problem];
@@ -28,6 +28,8 @@ const generateHint = (req, res) => {
   // Return successful response
   res.json({
     problem,
+    language,
+    code,
     hintLevel,
     hint
   });
