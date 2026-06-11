@@ -19,6 +19,12 @@ const generateHint = (req, res) => {
 
   // Find the requested hint level
   const hint = selectedProblem[hintLevel];
+  let personalizedHint = hint;
+
+  if (analysis.approach === "Brute Force") {
+    personalizedHint =
+      "Your solution appears to use brute force. " + hint;
+  }
 
   // Check if hint level exists
   if (!hint) {
@@ -33,7 +39,7 @@ const generateHint = (req, res) => {
     language,
     code,
     hintLevel,
-    hint,
+    hint: personalizedHint,
     analysis
   });
 };
