@@ -4,9 +4,16 @@ const analyzeCode = (code) => {
 
   const hasNestedLoops = matches.length >= 2;
 
+  let feedback = "No specific feedback available.";
+
+  if (hasNestedLoops) {
+    feedback = "Your solution appears to use a brute-force approach.";
+  }
+
   return {
     hasNestedLoops,
-    approach: hasNestedLoops ? "Brute Force" : "Unknown"
+    approach: hasNestedLoops ? "Brute Force" : "Unknown",
+    feedback
   };
 };
 
