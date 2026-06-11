@@ -2,8 +2,11 @@ const analyzeCode = (code) => {
 
   const matches = code.match(/for/g) || [];
 
+  const hasNestedLoops = matches.length >= 2;
+
   return {
-    hasNestedLoops: matches.length >= 2
+    hasNestedLoops,
+    approach: hasNestedLoops ? "Brute Force" : "Unknown"
   };
 };
 
