@@ -23,7 +23,7 @@ const generateHint = (req, res) => {
 
   if (analysis.approach === "Brute Force") {
     personalizedHint =
-      "Your solution appears to use brute force. " + hint;
+      `${analysis.feedback} ${hint}`;
   }
 
   // Check if hint level exists
