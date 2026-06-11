@@ -1,9 +1,11 @@
 const hints = require("../data/hints");
+const { analyzeCode } = require("../services/codeAnalysisService");
 
 const generateHint = (req, res) => {
 
   // Extract values from request body
   const { problem, code, language, hintLevel } = req.body;
+  const analysis = analyzeCode(code);
 
   // Find the requested problem
   const selectedProblem = hints[problem];
@@ -31,7 +33,8 @@ const generateHint = (req, res) => {
     language,
     code,
     hintLevel,
-    hint
+    hint,
+    analysis
   });
 };
 
