@@ -1,6 +1,9 @@
 const analyzeCode = (code) => {
+
+  const matches = code.match(/for/g) || [];
+
   return {
-    hasNestedLoops: false
+    hasNestedLoops: matches.length >= 2
   };
 };
 
