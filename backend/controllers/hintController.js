@@ -1,45 +1,59 @@
 const hints = require("../data/hints");
 const { analyzeCode } = require("../services/codeAnalysisService");
+const { generateHintWithAI } = require("../services/nimService");
 
-const generateHint = (req, res) => {
+const generateHint = async (req, res) => {
 
   // Extract values from request body
   const { problem, code, language, hintLevel } = req.body;
+
+  // Analyze student code
   const analysis = analyzeCode(code);
 
-  // Find the requested problem
+  // Find requested problem
   const selectedProblem = hints[problem];
 
-  // Check if problem exists
   if (!selectedProblem) {
     return res.status(404).json({
       error: "Problem not found"
     });
   }
 
-  // Find the requested hint level
-  const hint = selectedProblem[hintLevel];
-  let personalizedHint = hint;
+  // Get fallback static hint
+  const fallbackHint = selectedProblem[hintLevel];
 
-  if (analysis.approach === "Brute Force") {
-    personalizedHint =
-      `${analysis.feedback} ${hint}`;
-  }
-
-  // Check if hint level exists
-  if (!hint) {
+  if (!fallbackHint) {
     return res.status(400).json({
       error: "Invalid hint level"
     });
   }
 
-  // Return successful response
+  // Default to fallback hint
+  let finalHint = fallbackHint;
+
+  try {
+    const aiHint = await generateHintWithAI(
+      problem,
+      code,
+      analysis,
+      hintLevel,
+      fallbackHint
+    );
+
+    if (aiHint) {
+      finalHint = aiHint;
+    }
+
+  } catch (error) {
+    console.log("Using fallback hint");
+  }
+
   res.json({
     problem,
     language,
     code,
     hintLevel,
-    hint: personalizedHint,
+    hint: finalHint,
     analysis
   });
 };
