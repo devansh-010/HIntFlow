@@ -1,0 +1,31 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #111;
+  color: white;
+}
+
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+input,
+select,
+textarea,
+button {
+  padding: 12px;
+  font-size: 16px;
+}
+
+button {
+  cursor: pointer;
+}
+
+.hint-box {
+  border: 1px solid #444;
+  padding: 20px;
+  min-height: 100px;
+}
