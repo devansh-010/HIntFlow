@@ -8,8 +8,11 @@ function App() {
   const [hintLevel, setHintLevel] = useState(1);
   const [code, setCode] = useState("");
   const [hint, setHint] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const generateHint = async () => {
+    setLoading(true);
+
     try {
       const response = await axios.post(
         "http://localhost:5000/api/generate-hint",
@@ -22,10 +25,12 @@ function App() {
       );
 
       setHint(response.data.hint);
+      setLoading(false);
 
     } catch (error) {
       console.error(error);
       setHint("Failed to generate hint.");
+      setLoading(false);
     }
   };
 
@@ -67,8 +72,13 @@ function App() {
         onChange={(e) => setCode(e.target.value)}
       />
 
-      <button onClick={generateHint}>
-        Generate Hint
+      <button
+        onClick={generateHint}
+        disabled={loading}
+      >
+        {loading
+          ? "Generating Hint..."
+          : "Generate Hint"}
       </button>
 
       <div className="hint-box">
