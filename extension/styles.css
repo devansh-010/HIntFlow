@@ -1,0 +1,62 @@
+#hintflow-button {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+
+  padding: 12px 20px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #2563eb;
+  color: white;
+
+  cursor: pointer;
+
+  z-index: 999999;
+}
+
+#hintflow-panel {
+  position: fixed;
+
+  top: 50%;
+  right: -350px;
+
+  transform: translateY(-50%);
+
+  width: 320px;
+
+  background: #111;
+  color: white;
+
+  border: 1px solid #333;
+  border-radius: 12px;
+
+  padding: 20px;
+
+  z-index: 999999;
+
+  transition: right 0.3s ease;
+}
+
+#hintflow-panel.show {
+  right: 20px;
+}
+
+#hintflow-panel h3 {
+  margin-top: 0;
+}
+
+#hintflow-panel select,
+#hintflow-panel button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+#hint-result {
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid #333;
+  min-height: 80px;
+}

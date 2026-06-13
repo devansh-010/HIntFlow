@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "HintFlow",
+  "version": "1.0",
+  "description": "AI DSA Mentor",
+
+  "content_scripts": [
+    {
+      "matches": [
+        "https://leetcode.com/*"
+      ],
+      "js": ["content.js"],
+      "css": ["styles.css"]
+    }
+  ]
+}
