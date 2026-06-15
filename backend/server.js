@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+const chatRoutes = require("./routes/chatRoutes");
 const express = require("express");
 const cors = require("cors");
 
@@ -17,6 +18,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api", hintRoutes);
+app.use("/api", chatRoutes);
 
 const PORT = 5000;
 
