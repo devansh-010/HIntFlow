@@ -28,6 +28,23 @@ panel.innerHTML = `
   <div id="hint-result">
     Hint will appear here
   </div>
+
+  <hr>
+
+  <h4>Ask HintFlow</h4>
+
+  <textarea
+    id="chat-input"
+    placeholder="Ask a doubt..."
+  ></textarea>
+
+  <button id="send-chat-btn">
+    Send
+  </button>
+
+  <div id="chat-response">
+    Chat response will appear here
+  </div>
 `;
 
 document.body.appendChild(button);
@@ -90,10 +107,91 @@ document
 
     } catch (error) {
 
-      console.error(error);
+      console.error("Hint Error:", error);
 
       hintResult.innerText =
         "Failed to generate hint.";
+
+    }
+
+  });
+
+document
+  .getElementById("send-chat-btn")
+  .addEventListener("click", async () => {
+
+    const currentPath =
+      window.location.pathname;
+
+    const titleElement = Array.from(
+      document.querySelectorAll(
+        'a[href^="/problems/"]'
+      )
+    ).find(link => {
+      const href =
+        link.getAttribute("href");
+
+      return currentPath.startsWith(href);
+    });
+
+    const problem =
+      titleElement?.innerText
+        .replace(/^\d+\.\s*/, "") ||
+      "Unknown Problem";
+
+    const code =
+      document.querySelector(".view-lines")
+        ?.innerText || "";
+
+    const question =
+      document.getElementById("chat-input")
+        .value;
+
+    if (!question.trim()) {
+      return;
+    }
+
+    const responseBox =
+      document.getElementById(
+        "chat-response"
+      );
+
+    responseBox.innerText =
+      "Thinking...";
+
+    try {
+
+      const response =
+        await fetch(
+          "http://localhost:5000/api/chat",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body: JSON.stringify({
+              problem,
+              code,
+              question
+            })
+          }
+        );
+
+      const data =
+        await response.json();
+
+      responseBox.innerText =
+        data.response;
+
+    } catch (error) {
+
+      console.error("Chat Error:", error);
+
+      responseBox.innerText =
+        "Failed to get response.";
 
     }
 
