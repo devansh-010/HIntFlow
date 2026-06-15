@@ -89,12 +89,39 @@ Generate exactly one hint.
 const generateChatResponse = async (
   problem,
   code,
-  question
+  currentHint,
+  hintLevel,
+  question,
+  chatHistory = []
 ) => {
   try {
 
+    const conversation = chatHistory
+      .map(
+        msg => `${msg.role}: ${msg.content}`
+      )
+      .join("\n");
+
     const prompt = `
 You are HintFlow, an AI DSA mentor.
+
+Hint Levels:
+
+Level 1:
+Only conceptual guidance.
+Do not reveal specific data structures, algorithms, or implementation details.
+
+Level 2:
+You may mention useful data structures or techniques.
+Do not explain implementation details.
+
+Level 3:
+You may explain the approach.
+Do not provide complete code.
+
+Level 4:
+You may provide detailed step-by-step guidance.
+Do not provide the full solution.
 
 Problem:
 ${problem}
@@ -102,14 +129,31 @@ ${problem}
 Student Code:
 ${code}
 
+Current Hint:
+${currentHint}
+
+Hint Level:
+${hintLevel}
+
+Conversation History:
+${conversation}
+
 Student Question:
 ${question}
 
 Answer the student's question clearly.
 
+Use the current hint as context.
+
 Do not provide the full solution unless explicitly requested.
 
 Focus on helping the student learn.
+
+IMPORTANT:
+- Respect the current hint level.
+- Do not reveal information beyond the current hint level.
+- If the student's question would reveal a higher-level hint, respond with guidance appropriate to the current level.
+- Build upon the current hint instead of introducing more advanced concepts.
 `;
 
     const response = await axios.post(

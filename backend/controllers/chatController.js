@@ -8,14 +8,18 @@ const chatWithMentor = async (req, res) => {
     const {
       problem,
       code,
-      question
+      currentHint,
+      question,
+      chatHistory
     } = req.body;
 
     const response =
       await generateChatResponse(
         problem,
         code,
-        question
+        currentHint,
+        question,
+        chatHistory
       );
 
     res.json({

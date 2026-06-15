@@ -1,3 +1,6 @@
+let currentHint = "";
+let chatHistory = [];
+
 const button = document.createElement("button");
 
 button.innerText = "💡 HintFlow";
@@ -31,19 +34,25 @@ panel.innerHTML = `
 
   <hr>
 
-  <h4>Ask HintFlow</h4>
+  <div id="chat-section" style="display:none;">
 
-  <textarea
-    id="chat-input"
-    placeholder="Ask a doubt..."
-  ></textarea>
+    <hr>
 
-  <button id="send-chat-btn">
-    Send
-  </button>
+    <h4>Ask HintFlow</h4>
 
-  <div id="chat-response">
-    Chat response will appear here
+    <textarea
+      id="chat-input"
+      placeholder="Ask about the hint..."
+    ></textarea>
+
+    <button id="send-chat-btn">
+      Send
+    </button>
+
+    <div id="chat-response">
+      Chat response will appear here
+    </div>
+
   </div>
 `;
 
@@ -103,7 +112,12 @@ document
 
       const data = await response.json();
 
+      currentHint = data.hint;
       hintResult.innerText = data.hint;
+
+      document.getElementById(
+        "chat-section"
+      ).style.display = "block";
 
     } catch (error) {
 
@@ -143,9 +157,19 @@ document
       document.querySelector(".view-lines")
         ?.innerText || "";
 
+    const hintLevel =
+      Number(
+        document.getElementById("hint-level").value
+      );
+
     const question =
       document.getElementById("chat-input")
         .value;
+
+    chatHistory.push({
+      role: "user",
+      content: question
+    });
 
     if (!question.trim()) {
       return;
@@ -175,7 +199,10 @@ document
             body: JSON.stringify({
               problem,
               code,
-              question
+              currentHint,
+              hintLevel,
+              question,
+              chatHistory
             })
           }
         );
@@ -185,6 +212,11 @@ document
 
       responseBox.innerText =
         data.response;
+
+      chatHistory.push({
+        role: "assistant",
+        content: data.response
+      });
 
     } catch (error) {
 
