@@ -4,6 +4,10 @@
   "version": "1.0",
   "description": "AI DSA Mentor",
 
+  "host_permissions": [
+    "http://localhost:5000/*"
+  ],
+
   "content_scripts": [
     {
       "matches": [

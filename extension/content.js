@@ -10,6 +10,10 @@ panel.id = "hintflow-panel";
 panel.innerHTML = `
   <h3>HintFlow</h3>
 
+  <div id="problem-title">
+    Detecting problem...
+  </div>
+
   <select id="hint-level">
     <option value="1">Hint Level 1</option>
     <option value="2">Hint Level 2</option>
@@ -29,6 +33,72 @@ panel.innerHTML = `
 document.body.appendChild(button);
 document.body.appendChild(panel);
 
+document
+  .getElementById("generate-hint-btn")
+  .addEventListener("click", async () => {
+
+    const currentPath = window.location.pathname;
+
+    const titleElement = Array.from(
+      document.querySelectorAll('a[href^="/problems/"]')
+    ).find(link => {
+      const href = link.getAttribute("href");
+      return currentPath.startsWith(href);
+    });
+
+    const problem =
+      titleElement?.innerText.replace(/^\d+\.\s*/, "") ||
+      "Unknown Problem";
+
+    const code =
+      document.querySelector(".view-lines")
+        ?.innerText || "";
+
+    const hintLevel =
+      Number(
+        document.getElementById("hint-level").value
+      );
+
+    const hintResult =
+      document.getElementById("hint-result");
+
+    hintResult.innerText = "Generating hint...";
+
+    try {
+
+      const response = await fetch(
+        "http://localhost:5000/api/generate-hint",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            problem,
+            code,
+            language: "cpp",
+            hintLevel
+          })
+        }
+      );
+
+      const data = await response.json();
+
+      hintResult.innerText = data.hint;
+
+    } catch (error) {
+
+      console.error(error);
+
+      hintResult.innerText =
+        "Failed to generate hint.";
+
+    }
+
+  });
+
 button.addEventListener("click", () => {
   panel.classList.toggle("show");
 });
@@ -40,12 +110,27 @@ setTimeout(() => {
     document.querySelectorAll('a[href^="/problems/"]')
   ).find(link => {
     const href = link.getAttribute("href");
-
     return currentPath.startsWith(href);
   });
 
+  const title = titleElement?.innerText || "Unknown Problem";
+
+  console.log("HintFlow Title:", title);
+
+  const problemTitleDiv =
+    document.getElementById("problem-title");
+
+  if (problemTitleDiv) {
+    problemTitleDiv.innerText =
+      `Problem: ${title}`;
+  }
+}, 5000);
+
+setTimeout(() => {
+  const editor = document.querySelector(".view-lines");
+
   console.log(
-    "HintFlow Title:",
-    titleElement?.innerText
+    "HintFlow Code:",
+    editor?.innerText
   );
 }, 5000);
