@@ -131,6 +131,20 @@ document
       .slice(0, 3)
       .map(pre => pre.innerText);
 
+    const constraints = Array.from(
+      document.querySelectorAll("ul")
+    )
+      .map(ul => ul.innerText)
+      .find(text =>
+        text.includes("nums.length") ||
+        text.includes("target")
+      ) || "";
+
+    console.log(
+      "HintFlow Constraints:",
+      constraints
+    );
+
     const hintLevel =
       Number(
         document.getElementById("hint-level").value
@@ -157,7 +171,8 @@ document
             code,
             language: "cpp",
             hintLevel,
-            examples
+            examples,
+            constraints
           })
         }
       );
@@ -371,6 +386,21 @@ setTimeout(() => {
   console.log(
     "HintFlow Examples:",
     examples
+  );
+
+}, 5000);
+
+setTimeout(() => {
+
+  const allLists = Array.from(
+    document.querySelectorAll("ul")
+  );
+
+  console.log(
+    "HintFlow ULs:",
+    allLists.map(
+      ul => ul.innerText
+    )
   );
 
 }, 5000);

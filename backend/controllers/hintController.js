@@ -5,11 +5,7 @@ const { generateHintWithAI } = require("../services/nimService");
 const generateHint = async (req, res) => {
 
   // Extract values from request body
-  const { problem, code, language, hintLevel, examples } = req.body;
-  console.log(
-    "Controller received examples:",
-    examples
-  );
+  const { problem, code, language, hintLevel, examples, constraints } = req.body;
 
   // Analyze student code
   const analysis = analyzeCode(code);
@@ -42,7 +38,8 @@ const generateHint = async (req, res) => {
       analysis,
       hintLevel,
       fallbackHint,
-      examples
+      examples,
+      constraints
     );
 
     if (aiHint) {

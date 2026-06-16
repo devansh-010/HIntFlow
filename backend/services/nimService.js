@@ -6,7 +6,8 @@ const generateHintWithAI = async (
   analysis,
   hintLevel,
   fallbackHint,
-  examples = []
+  examples = [],
+  constraints = ""
 ) => {
   try {
     const prompt = `
@@ -48,6 +49,9 @@ ${analysis.approaches.join(", ")}
 Examples:
 ${examples.join("\n\n")}
 
+Constraints:
+${constraints}
+
 Student Code:
 ${code}
 
@@ -56,10 +60,6 @@ ${hintLevel}
 
 Generate exactly one hint.
 `;
-    console.log(
-      "HintFlow Examples Sent To AI:",
-      examples
-    );
 
     const response = await axios.post(
       "https://integrate.api.nvidia.com/v1/chat/completions",
