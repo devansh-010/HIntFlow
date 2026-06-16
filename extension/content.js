@@ -11,18 +11,31 @@ const panel = document.createElement("div");
 panel.id = "hintflow-panel";
 
 panel.innerHTML = `
-  <h3>HintFlow</h3>
+  <div id="hintflow-hero">
+    <span id="hintflow-hero-icon">💡</span>
+    <span id="hintflow-hero-title">HintFlow</span>
+    <span id="hintflow-hero-tagline">Your AI Hint Companion</span>
+  </div>
 
   <div id="problem-title">
     Detecting problem...
   </div>
 
-  <select id="hint-level">
-    <option value="1">Hint Level 1</option>
-    <option value="2">Hint Level 2</option>
-    <option value="3">Hint Level 3</option>
-    <option value="4">Hint Level 4</option>
-  </select>
+  <div id="hint-level-dropdown" class="custom-dropdown">
+    <div class="custom-dropdown-selected" id="dropdown-selected">
+      <span>Hint Level 1</span>
+      <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 16 16" fill="#9ca3af">
+        <path d="M4 6l4 4 4-4"/>
+      </svg>
+    </div>
+    <ul class="custom-dropdown-options" id="dropdown-options">
+      <li data-value="1" class="active">Hint Level 1</li>
+      <li data-value="2">Hint Level 2</li>
+      <li data-value="3">Hint Level 3</li>
+      <li data-value="4">Hint Level 4</li>
+    </ul>
+    <input type="hidden" id="hint-level" value="1">
+  </div>
 
   <button id="generate-hint-btn">
     Generate Hint
@@ -38,24 +51,58 @@ panel.innerHTML = `
 
     <hr>
 
-    <h4>Ask HintFlow</h4>
-
-    <textarea
-      id="chat-input"
-      placeholder="Ask about the hint..."
-    ></textarea>
-
-    <button id="send-chat-btn">
-      Send
-    </button>
-
     <div id="chat-history"></div>
+
+    <div id="chat-input-container">
+
+      <div id="chat-controls">
+
+      <textarea
+        id="chat-input"
+        placeholder="Ask about the hint..."
+      ></textarea>
+
+      <button id="send-chat-btn">
+        ➤
+      </button>
+
+    </div>
+
+    </div>
 
   </div>
 `;
 
 document.body.appendChild(button);
 document.body.appendChild(panel);
+
+// Custom dropdown logic
+const dropdownEl = document.getElementById("hint-level-dropdown");
+const dropdownSelected = document.getElementById("dropdown-selected");
+const dropdownOptions = document.getElementById("dropdown-options");
+const hiddenInput = document.getElementById("hint-level");
+
+dropdownSelected.addEventListener("click", (e) => {
+  e.stopPropagation();
+  dropdownEl.classList.toggle("open");
+});
+
+dropdownOptions.addEventListener("click", (e) => {
+  const li = e.target.closest("li");
+  if (!li) return;
+  dropdownOptions.querySelectorAll("li").forEach(el => el.classList.remove("active"));
+  li.classList.add("active");
+  dropdownSelected.querySelector("span").textContent = li.textContent;
+  hiddenInput.value = li.dataset.value;
+  dropdownEl.classList.remove("open");
+});
+
+document.addEventListener("click", () => {
+  dropdownEl.classList.remove("open");
+});
+
+dropdownEl.addEventListener("click", (e) => e.stopPropagation());
+
 
 document
   .getElementById("generate-hint-btn")
@@ -78,6 +125,12 @@ document
       document.querySelector(".view-lines")
         ?.innerText || "";
 
+    const examples = Array.from(
+      document.querySelectorAll("pre")
+    )
+      .slice(0, 3)
+      .map(pre => pre.innerText);
+
     const hintLevel =
       Number(
         document.getElementById("hint-level").value
@@ -89,7 +142,7 @@ document
     hintResult.innerText = "Generating hint...";
 
     try {
-
+      console.log("Sending examples:", examples);
       const response = await fetch(
         "http://localhost:5000/api/generate-hint",
         {
@@ -103,7 +156,8 @@ document
             problem,
             code,
             language: "cpp",
-            hintLevel
+            hintLevel,
+            examples
           })
         }
       );
@@ -263,6 +317,15 @@ document
 
   });
 
+document
+  .getElementById("chat-input")
+  .addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      document.getElementById("send-chat-btn").click();
+    }
+  });
+
 button.addEventListener("click", () => {
   panel.classList.toggle("show");
 });
@@ -297,4 +360,17 @@ setTimeout(() => {
     "HintFlow Code:",
     editor?.innerText
   );
+}, 5000);
+
+setTimeout(() => {
+
+  const examples = Array.from(
+    document.querySelectorAll("pre")
+  ).map(pre => pre.innerText);
+
+  console.log(
+    "HintFlow Examples:",
+    examples
+  );
+
 }, 5000);
