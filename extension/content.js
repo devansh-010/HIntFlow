@@ -49,9 +49,7 @@ panel.innerHTML = `
       Send
     </button>
 
-    <div id="chat-response">
-      Chat response will appear here
-    </div>
+    <div id="chat-history"></div>
 
   </div>
 `;
@@ -162,26 +160,39 @@ document
         document.getElementById("hint-level").value
       );
 
+    const chatInput =
+      document.getElementById("chat-input");
+
     const question =
-      document.getElementById("chat-input")
-        .value;
+      chatInput.value;
+
+    if (!question.trim()) {
+      return;
+    }
 
     chatHistory.push({
       role: "user",
       content: question
     });
 
-    if (!question.trim()) {
-      return;
-    }
+    chatInput.value = "";
 
-    const responseBox =
+    const chatHistoryDiv =
       document.getElementById(
-        "chat-response"
+        "chat-history"
       );
 
-    responseBox.innerText =
-      "Thinking...";
+    chatHistoryDiv.innerHTML += `
+      <div class="user-message">
+        <strong>You:</strong><br>
+        ${question}
+      </div>
+
+      <div class="ai-message">
+        <strong>HintFlow:</strong><br>
+        Thinking...
+      </div>
+    `;
 
     try {
 
@@ -210,8 +221,21 @@ document
       const data =
         await response.json();
 
-      responseBox.innerText =
-        data.response;
+      const aiMessages =
+        document.querySelectorAll(
+          ".ai-message"
+        );
+
+      const lastAiMessage =
+        aiMessages[aiMessages.length - 1];
+
+      lastAiMessage.innerHTML = `
+        <strong>HintFlow:</strong><br>
+        ${data.response}
+      `;
+
+      chatHistoryDiv.scrollTop =
+        chatHistoryDiv.scrollHeight;
 
       chatHistory.push({
         role: "assistant",
@@ -222,8 +246,18 @@ document
 
       console.error("Chat Error:", error);
 
-      responseBox.innerText =
-        "Failed to get response.";
+      const aiMessages =
+        document.querySelectorAll(
+          ".ai-message"
+        );
+
+      const lastAiMessage =
+        aiMessages[aiMessages.length - 1];
+
+      lastAiMessage.innerHTML = `
+        <strong>HintFlow:</strong><br>
+        Failed to get response.
+      `;
 
     }
 

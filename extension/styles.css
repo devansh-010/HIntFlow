@@ -60,3 +60,23 @@
   border: 1px solid #333;
   min-height: 80px;
 }
+
+#chat-history {
+  margin-top: 10px;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.user-message {
+  background: #2d3748;
+  padding: 8px;
+  border-radius: 8px;
+  margin: 8px 0;
+}
+
+.ai-message {
+  background: #1a202c;
+  padding: 8px;
+  border-radius: 8px;
+  margin: 8px 0;
+}
