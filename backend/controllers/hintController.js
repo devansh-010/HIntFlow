@@ -48,6 +48,7 @@ const generateHint = async (req, res) => {
     }
 
   } catch (error) {
+    console.warn("AI hint generation failed, using fallback hint");
     // Fall back to static hint
   }
 
