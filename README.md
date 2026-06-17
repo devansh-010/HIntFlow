@@ -91,7 +91,6 @@ The system enforces hint levels and prevents the AI from revealing information b
 ### AI
 
 * NVIDIA NIM API
-* Meta Llama 3.3 70B Instruct
 
 ---
 
