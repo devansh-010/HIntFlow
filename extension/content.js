@@ -140,10 +140,27 @@ document
         text.includes("target")
       ) || "";
 
-    console.log(
-      "HintFlow Constraints:",
-      constraints
-    );
+    const language =
+      Array.from(
+        document.querySelectorAll("button")
+      )
+        .map(btn => btn.innerText?.trim())
+        .find(text =>
+          text &&
+          (
+            text === "C++" ||
+            text === "Java" ||
+            text === "Python3" ||
+            text === "Python" ||
+            text === "JavaScript" ||
+            text === "TypeScript" ||
+            text === "Go" ||
+            text === "Rust" ||
+            text === "C#" ||
+            text === "Kotlin"
+          )
+        ) || "Unknown";
+
 
     const hintLevel =
       Number(
@@ -156,7 +173,6 @@ document
     hintResult.innerText = "Generating hint...";
 
     try {
-      console.log("Sending examples:", examples);
       const response = await fetch(
         "http://localhost:5000/api/generate-hint",
         {
@@ -169,7 +185,7 @@ document
           body: JSON.stringify({
             problem,
             code,
-            language: "cpp",
+            language,
             hintLevel,
             examples,
             constraints
@@ -357,8 +373,6 @@ setTimeout(() => {
 
   const title = titleElement?.innerText || "Unknown Problem";
 
-  console.log("HintFlow Title:", title);
-
   const problemTitleDiv =
     document.getElementById("problem-title");
 
@@ -367,40 +381,4 @@ setTimeout(() => {
       `Problem: ${title}`;
   }
 }, 5000);
-
-setTimeout(() => {
-  const editor = document.querySelector(".view-lines");
-
-  console.log(
-    "HintFlow Code:",
-    editor?.innerText
-  );
-}, 5000);
-
-setTimeout(() => {
-
-  const examples = Array.from(
-    document.querySelectorAll("pre")
-  ).map(pre => pre.innerText);
-
-  console.log(
-    "HintFlow Examples:",
-    examples
-  );
-
-}, 5000);
-
-setTimeout(() => {
-
-  const allLists = Array.from(
-    document.querySelectorAll("ul")
-  );
-
-  console.log(
-    "HintFlow ULs:",
-    allLists.map(
-      ul => ul.innerText
-    )
-  );
-
-}, 5000);
+

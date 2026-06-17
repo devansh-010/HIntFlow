@@ -3,6 +3,7 @@ const axios = require("axios");
 const generateHintWithAI = async (
   problem,
   code,
+  language,
   analysis,
   hintLevel,
   fallbackHint,
@@ -52,6 +53,9 @@ ${examples.join("\n\n")}
 Constraints:
 ${constraints}
 
+Programming Language:
+${language}
+
 Student Code:
 ${code}
 
@@ -60,6 +64,7 @@ ${hintLevel}
 
 Generate exactly one hint.
 `;
+
 
     const response = await axios.post(
       "https://integrate.api.nvidia.com/v1/chat/completions",
@@ -133,6 +138,9 @@ Do not provide the full solution.
 
 Problem:
 ${problem}
+
+Programming Language:
+${language}
 
 Student Code:
 ${code}

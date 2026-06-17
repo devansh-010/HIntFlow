@@ -35,6 +35,7 @@ const generateHint = async (req, res) => {
     const aiHint = await generateHintWithAI(
       problem,
       code,
+      language,
       analysis,
       hintLevel,
       fallbackHint,
@@ -47,7 +48,7 @@ const generateHint = async (req, res) => {
     }
 
   } catch (error) {
-    console.log("Using fallback hint");
+    // Fall back to static hint
   }
 
   res.json({
