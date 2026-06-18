@@ -10,23 +10,12 @@ const generateHint = async (req, res) => {
   // Analyze student code
   const analysis = analyzeCode(code);
 
-  // Find requested problem
+  // Find requested problem (optional — may not exist in hints.js)
   const selectedProblem = hints[problem];
 
-  if (!selectedProblem) {
-    return res.status(404).json({
-      error: "Problem not found"
-    });
-  }
-
-  // Get fallback static hint
-  const fallbackHint = selectedProblem[hintLevel];
-
-  if (!fallbackHint) {
-    return res.status(400).json({
-      error: "Invalid hint level"
-    });
-  }
+  // Get fallback static hint, or build a generic one
+  const fallbackHint = selectedProblem?.[hintLevel]
+    || `Provide a Hint Level ${hintLevel} hint for this problem.`;
 
   // Default to fallback hint
   let finalHint = fallbackHint;

@@ -195,6 +195,11 @@ document
 
       const data = await response.json();
 
+      if (!response.ok) {
+        hintResult.innerText = data.error || "Server error occurred.";
+        return;
+      }
+
       currentHint = data.hint;
       hintResult.innerText = data.hint;
 
