@@ -240,6 +240,27 @@ document
       document.querySelector(".view-lines")
         ?.innerText || "";
 
+    const language =
+      Array.from(
+        document.querySelectorAll("button")
+      )
+        .map(btn => btn.innerText?.trim())
+        .find(text =>
+          text &&
+          (
+            text === "C++" ||
+            text === "Java" ||
+            text === "Python3" ||
+            text === "Python" ||
+            text === "JavaScript" ||
+            text === "TypeScript" ||
+            text === "Go" ||
+            text === "Rust" ||
+            text === "C#" ||
+            text === "Kotlin"
+          )
+        ) || "Unknown";
+
     const hintLevel =
       Number(
         document.getElementById("hint-level").value
@@ -295,6 +316,7 @@ document
             body: JSON.stringify({
               problem,
               code,
+              language,
               currentHint,
               hintLevel,
               question,
@@ -381,4 +403,4 @@ setTimeout(() => {
       `Problem: ${title}`;
   }
 }, 5000);
-
+

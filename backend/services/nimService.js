@@ -102,6 +102,7 @@ Generate exactly one hint.
 const generateChatResponse = async (
   problem,
   code,
+  language,
   currentHint,
   hintLevel,
   question,

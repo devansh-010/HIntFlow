@@ -8,6 +8,7 @@ const chatWithMentor = async (req, res) => {
     const {
       problem,
       code,
+      language,
       currentHint,
       question,
       chatHistory
@@ -17,6 +18,7 @@ const chatWithMentor = async (req, res) => {
       await generateChatResponse(
         problem,
         code,
+        language,
         currentHint,
         question,
         chatHistory
